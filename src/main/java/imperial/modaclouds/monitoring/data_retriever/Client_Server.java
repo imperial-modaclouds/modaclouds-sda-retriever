@@ -2,19 +2,8 @@ package imperial.modaclouds.monitoring.data_retriever;
 
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.restlet.Application;
-import org.restlet.Component;
-import org.restlet.Restlet;
-import org.restlet.data.Protocol;
-import org.restlet.routing.Router;
-import org.restlet.routing.Template;
 
-public class Client_Server extends Application{
-	
-	/**
-	 * The restlet component.
-	 */
-	private static Component component;
-	
+public class Client_Server extends Application{	
 	/**
 	 * The multi key map to hold the received data.
 	 */
@@ -67,35 +56,13 @@ public class Client_Server extends Application{
 	 * This function starts to collect the monitoring data from DDA
 	 */
 	public static void retrieve(int port) {
-		component = new Component();
-		
-		component.getServers().add(Protocol.HTTP, Integer.valueOf(port));
-		
-		component.getClients().add(Protocol.FILE);
-		
-		Client_Server localObserver = new Client_Server();
-		
-		component.getDefaultHost().attach("",localObserver);
-		
+		Observer observer = new Observer(Integer.valueOf(port));
 		try {
-			component.start();
+			observer.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	/**
-	 * This function is used to direct the received data to a specific class for processing
-	 */
-	public Restlet createInboundRoot() {
-		Router router = new Router(getContext());
-		
-		router.setDefaultMatchingMode(Template.MODE_EQUALS);
-		
-		router.attach("/results", Observer.class);
-		
-		return router;
 	}
 
 }
