@@ -53,6 +53,22 @@ public class ValueSet {
 	public ArrayList<String> getTimestamps() {
 		return timestamps;
 	}
+
+	/**
+	 * Set the values.
+	 * @param values the value arrayList.
+	 */
+	public void setValues(ArrayList<String> values) {
+		this.values = values;
+	}
+
+	/**
+	 * Set the timestamps
+	 * @param timestamps the timestamps arrayList.
+	 */
+	public void setTimestamps(ArrayList<String> timestamps) {
+		this.timestamps = timestamps;
+	}
 	
 	
 }

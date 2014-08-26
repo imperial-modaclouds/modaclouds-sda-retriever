@@ -1,9 +1,14 @@
 package imperial.modaclouds.monitoring.data_retriever;
 
+import java.util.ArrayList;
+
+import org.apache.commons.collections4.MapIterator;
+import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.restlet.Application;
 
 public class Client_Server extends Application{	
+	
 	/**
 	 * The multi key map to hold the received data.
 	 */
@@ -22,9 +27,35 @@ public class Client_Server extends Application{
 			return null;
 		
 		ValueSet result = (ValueSet) data.get(resource,metricName);
-		data.removeMultiKey(resource, metricName);
+		//data.removeMultiKey(resource, metricName);
 		
 		return result;
+	}
+	
+	public static synchronized void removeOldData(long t0) {
+		MapIterator it = data.mapIterator();
+		
+		while ( it.hasNext() ) {
+			it.next();
+			
+			MultiKey mk = (MultiKey) it.getKey();
+			ValueSet result = (ValueSet) it.getValue();
+			
+			ArrayList<String> timestamps = result.getTimestamps();
+			ArrayList<String> values = result.getValues();
+			for (int i = 0; i < timestamps.size(); i++) {
+				long timestamp_long = Long.valueOf(timestamps.get(i)).longValue();
+				if (timestamp_long < t0) {
+					timestamps.remove(i);
+					values.remove(i);
+				}
+			}
+			
+			result.setTimestamps(timestamps);
+			result.setValues(values);
+			
+			data.put(mk, result);
+		}
 	}
 	
 	/**
@@ -55,14 +86,17 @@ public class Client_Server extends Application{
 	/**
 	 * This function starts to collect the monitoring data from DDA
 	 */
-	public static void retrieve(int port) {
+	public static void retrieve(int port) {	
+		
+		HistoryRemoving history = new HistoryRemoving(System.currentTimeMillis());
+		history.start();
+		
 		Observer observer = new Observer(Integer.valueOf(port));
 		try {
 			observer.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 }

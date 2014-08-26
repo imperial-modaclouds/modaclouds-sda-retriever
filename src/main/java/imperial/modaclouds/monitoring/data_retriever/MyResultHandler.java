@@ -28,6 +28,8 @@ public class MyResultHandler extends ResultsHandler  {
 
 		for (Map<String, Variable> m : bindings) {
 			for (int i = 0; i < varNames.size(); i++) {
+				System.out.println(varNames.get(i));
+				System.out.println(m.get(varNames.get(i)).getValue());
 				//System.out.println(m.get(varNames.get(i)).getValue());
 				Variable var;
 				var = m.get(varNames.get(i));
