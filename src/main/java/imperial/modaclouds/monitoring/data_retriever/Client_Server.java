@@ -82,13 +82,13 @@ public class Client_Server extends Application{
 			}
 		}
 	}
-
+	
 	/**
 	 * This function starts to collect the monitoring data from DDA
 	 */
 	public static void retrieve(int port) {	
 		
-		HistoryRemoving history = new HistoryRemoving(System.currentTimeMillis());
+		HistoryRemoving history = new HistoryRemoving(System.currentTimeMillis(), 60*60*1000);
 		history.start();
 		
 		Observer observer = new Observer(Integer.valueOf(port));
@@ -99,4 +99,19 @@ public class Client_Server extends Application{
 		}
 	}
 
+	/**
+	 * This function starts to collect the monitoring data from DDA
+	 */
+	public static void retrieve(int port, long period) {	
+		
+		HistoryRemoving history = new HistoryRemoving(System.currentTimeMillis(),period);
+		history.start();
+		
+		Observer observer = new Observer(Integer.valueOf(port));
+		try {
+			observer.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

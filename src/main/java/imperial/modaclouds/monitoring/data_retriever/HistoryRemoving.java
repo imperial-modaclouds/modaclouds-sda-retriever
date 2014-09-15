@@ -4,10 +4,13 @@ public class HistoryRemoving implements Runnable{
 
 	private long startTime;
 	
+	private long period;
+	
 	private Thread hisr;
 	
-	public HistoryRemoving(long startTime) {
+	public HistoryRemoving(long startTime, long period) {
 		this.startTime = startTime;
+		this.period = period;
 	}
 	
 	public void start() {
@@ -19,7 +22,7 @@ public class HistoryRemoving implements Runnable{
 	public void run() {
 		long t1 = System.currentTimeMillis();
 		
-		if (t1 - startTime > 30*60*1000) {
+		if (t1 - startTime > period) {
 			Client_Server.removeOldData(startTime);
 			startTime = startTime + 5*60*1000;
 		}
