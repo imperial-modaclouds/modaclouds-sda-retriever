@@ -42,7 +42,7 @@ public class MyResultHandler extends ResultsHandler  {
 					metric = var.getValue();
 					count = count + 1;
 					break;
-				case "value":
+				case "input":
 					metricValue = var.getValue();
 					count = count + 1;
 					break;
