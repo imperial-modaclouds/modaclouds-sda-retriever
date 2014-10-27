@@ -4,7 +4,7 @@
 
 	<groupId>imperial.modaclouds.monitoring</groupId>
 	<artifactId>data-retriever</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<packaging>jar</packaging>
 
 	<name>data-retriever</name>
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>it.polimi.modaclouds.monitoring</groupId>
 			<artifactId>metrics-observer</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
