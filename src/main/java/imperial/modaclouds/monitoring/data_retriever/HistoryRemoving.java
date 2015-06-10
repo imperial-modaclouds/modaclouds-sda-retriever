@@ -23,8 +23,7 @@ public class HistoryRemoving implements Runnable{
 		long t1 = System.currentTimeMillis();
 		
 		if (t1 - startTime > period) {
-			Client_Server.removeOldData(startTime);
-			startTime = startTime + 5*60*1000;
+			Client_Server.removeOldData(t1-period);
 		}
 		else {
 			try {

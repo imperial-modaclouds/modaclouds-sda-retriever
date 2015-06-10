@@ -1,6 +1,8 @@
 package imperial.modaclouds.monitoring.data_retriever;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.keyvalue.MultiKey;
@@ -8,6 +10,8 @@ import org.apache.commons.collections4.map.MultiKeyMap;
 import org.restlet.Application;
 
 public class Client_Server extends Application{	
+	
+	private static Map<String,ArrayList<String>> metricMap;
 	
 	/**
 	 * The multi key map to hold the received data.
@@ -81,17 +85,40 @@ public class Client_Server extends Application{
 				data.put(resource, metricName, valueSet);
 			}
 		}
+		if (metricMap.get(metricName) == null) {
+			ArrayList<String> resources = new ArrayList<String>();
+			resources.add(resource);
+			metricMap.put(metricName, resources);
+		}
+		else {
+			if (!metricMap.get(metricName).contains(resource)) {
+				ArrayList<String> resources = metricMap.get(metricName);
+				resources.add(resource);
+				metricMap.put(metricName, resources);
+			}
+		}
 	}
 	
+	public static Map<String, ArrayList<String>> getMetricMap() {
+		return metricMap;
+	}
+
+	public static void setMetricMap(Map<String, ArrayList<String>> metricMap) {
+		Client_Server.metricMap = metricMap;
+	}
+
 	/**
 	 * This function starts to collect the monitoring data from DDA
 	 */
 	public static void retrieve(int port) {	
 		
+		metricMap = new HashMap<String,ArrayList<String>>();
+		
 		HistoryRemoving history = new HistoryRemoving(System.currentTimeMillis(), 60*60*1000);
 		history.start();
 		
 		Observer observer = new Observer(Integer.valueOf(port));
+		System.out.println("Start to receive data...");
 		try {
 			observer.start();
 		} catch (Exception e) {
@@ -103,6 +130,8 @@ public class Client_Server extends Application{
 	 * This function starts to collect the monitoring data from DDA
 	 */
 	public static void retrieve(int port, long period) {	
+		
+		metricMap = new HashMap<String,ArrayList<String>>();
 		
 		HistoryRemoving history = new HistoryRemoving(System.currentTimeMillis(),period);
 		history.start();
